@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-unfetch';
 import Link from 'next/link';
 import React from 'react';
+import Layout from '../components/Layout';
 
 const StarshipPostLink = props => (
   <li>
@@ -12,14 +13,16 @@ const StarshipPostLink = props => (
 );
 
 const Index = props => (
-  <div>
-    <h1>Star Wars Starships</h1>
-    <ul>
-      {props.starships.map(s => (
-        <StarshipPostLink key={s} sid={s} name={s} />
-      ))}
-    </ul>
-  </div>
+  <Layout>
+    <div>
+      <h1>Star Wars Starships</h1>
+      <ul>
+        {props.starships.map(s => (
+          <StarshipPostLink key={s} sid={s} name={s} />
+        ))}
+      </ul>
+    </div>
+  </Layout>
 );
 
 Index.getInitialProps = async () => {
