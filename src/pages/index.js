@@ -18,7 +18,7 @@ const Index = props => (
       <h1>Star Wars Starships</h1>
       <ul>
         {props.starships.map(s => (
-          <StarshipPostLink key={s} sid={s} name={s} />
+          <StarshipPostLink key={s.name} sid={s.name} name={s.name} />
         ))}
       </ul>
     </div>
@@ -28,11 +28,19 @@ const Index = props => (
 Index.getInitialProps = async () => {
   const res = await fetch('https://swapi.co/api/starships/');
   const data = await res.json();
+  let ships = data.results;
 
-  console.log(`${data.results.length} starships found!`);
+  for (let c = 2; c <= Math.ceil(data.count / 10); c++) {
+    await fetch(`https://swapi.co/api/starships/?page=${c}`)
+      .then(res => res.json())
+      // eslint-disable-next-line no-loop-func
+      .then(nextData => {
+        ships = [...ships, ...nextData.results];
+      });
+  }
 
   return {
-    starships: data.results.map(d => d.name)
+    starships: ships
   };
 };
 
