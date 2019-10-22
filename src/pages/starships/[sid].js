@@ -32,9 +32,8 @@ const StarShipPost = props => {
 
 StarShipPost.getInitialProps = async context => {
   const { sid } = context.query;
-  const res = await fetch(`https://swapi.co/api/starships/?search=${sid}`);
-  const data = await res.json();
-  const [ship] = data.results;
+  const res = await fetch(`https://swapi.co/api/starships/${sid}/`);
+  const ship = await res.json();
 
   console.log(`Fetched ship: ${ship.name}`);
 
