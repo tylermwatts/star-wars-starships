@@ -28,15 +28,16 @@ const Index = props => (
 Index.getInitialProps = async () => {
   const res = await fetch('https://swapi.co/api/starships/');
   const data = await res.json();
-  let ships = data.results;
+  const ships = data.results;
 
-  for (let c = 2; c <= Math.ceil(data.count / 10); c++) {
-    await fetch(`https://swapi.co/api/starships/?page=${c}`)
-      .then(res => res.json())
-      // eslint-disable-next-line no-loop-func
-      .then(nextData => {
-        ships = [...ships, ...nextData.results];
-      });
+  if (data.count > 10) {
+    for (let c = 2; c <= Math.ceil(data.count / 10); c++) {
+      await fetch(`https://swapi.co/api/starships/?page=${c}`)
+        .then(res => res.json())
+        .then(nextData => {
+          ships.push(...nextData.results);
+        });
+    }
   }
 
   return {
